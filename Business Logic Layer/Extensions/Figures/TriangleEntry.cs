@@ -17,14 +17,8 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
         /// <exception cref="DataValidException"></exception>
         public static int CheckElemByElem(this IList<Point2BL> elemOne, IList<Point2BL> elemTwo)
         {
-            if (elemOne.Count != 3 || elemTwo.Count != 3)
-                throw new DataValidException("Фигуры являются не треугольниками");
-
-            var count1 = elemOne.GroupBy(x => (x.X, x.Y)).Count();
-            var count2 = elemTwo.GroupBy(x => (x.X, x.Y)).Count();
-            if (count1 != 3 || count2 != 3)
-                throw new DataValidException("Фигуры являются не треугольниками");
-
+            Check(elemOne);
+            Check(elemTwo);
             int min = 0;
             int max = 0;
             List<int> param = new List<int>();
@@ -87,5 +81,26 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             else
                 return -1;//точка не принадлежит елементу
         }
+
+        private static bool Check(IList<Point2BL> elem)
+        {
+            if (elem.Count != 3)
+                throw new DataValidException("Фигура являются не треугольниками");
+
+            var x = elem.GroupBy(x => x.X).Count();
+            if (x <= 1)
+                throw new DataValidException("Фигура являются не треугольниками");
+
+            x = elem.GroupBy(x => x.Y).Count();
+            if (x <= 1)
+                throw new DataValidException("Фигура являются не треугольниками");
+
+            x = elem.GroupBy(x => (x.X, x.Y)).Count();
+            if (x != 3)
+                throw new DataValidException("Фигура являются не треугольниками");
+
+            return true;
+        }
+
     }
 }

@@ -19,7 +19,7 @@ namespace Triangle
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            var results = await _service.Get(Color.YellowGreen, Color.ForestGreen, Color.Blue);
+            var results = await _service.Get(Color.YellowGreen, Color.ForestGreen);
             CreateGraphics(results, pictureBox1);
 
             var count = results.GroupBy(x => x.ZIndex).Count();

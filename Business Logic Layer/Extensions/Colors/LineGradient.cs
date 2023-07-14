@@ -1,6 +1,7 @@
 ﻿using Business_Logic_Layer.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 
@@ -18,21 +19,7 @@ namespace Business_Logic_Layer.Extensions.Colors
         public static IList<Color> GetColors(int count, IList<Color> colors)
         {
             List<Color> result = new List<Color>();
-            List<Color> colorsNew = new List<Color>();
-            if (count < 1)
-                throw new DataValidException("Неверно заданное количество элементов");
-            if (colors == null || colors.Count < 1)
-                throw new DataValidException("Цвета не заданы");
-            if (count == 1)
-                return new List<Color>() { colors[0] };
-            if (count > 1 && colors.Count == 1)
-            {
-                colorsNew.Add(colors[0]);
-                colorsNew.Add(Color.FromArgb(255, colors[0].R / 10, colors[0].G / 10, colors[0].B / 10));
-            }
-            else
-                colorsNew = colors.ToList();
-
+            var colorsNew = Check(count, colors);
             //находим % который занимает в градации между цветам i и i + 1 элементов colors, в сумме будет 100% * (count - 1)
             //при переходе через 100% выбираем другую группу colors (i + 1)
             //потеря точности из-за double, влияет?
@@ -59,6 +46,29 @@ namespace Business_Logic_Layer.Extensions.Colors
                 }
             }
             return result;
+        }
+
+        private static List<Color> Check(int count, IList<Color> colors)
+        {
+            List<Color> colorsNew = new List<Color>();
+            if (count < 1)
+                throw new DataValidException("Неверно заданное количество элементов");
+            if (colors == null || colors.Count < 1)
+                throw new DataValidException("Цвета не заданы");
+            if (count == 1)
+            {
+                colorsNew.Add(colors[0]);
+                return colorsNew;
+            }
+            if (count > 1 && colors.Count == 1)
+            {
+                colorsNew.Add(colors[0]);
+                colorsNew.Add(Color.FromArgb(255, colors[0].R / 10, colors[0].G / 10, colors[0].B / 10));
+            }
+            else
+                colorsNew = colors.ToList();
+
+            return colorsNew;
         }
     }
 }

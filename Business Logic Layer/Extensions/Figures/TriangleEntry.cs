@@ -17,27 +17,26 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
         /// <exception cref="DataValidException"></exception>
         public static int CheckElemByElem(this IList<Point2BL> elemOne, IList<Point2BL> elemTwo)
         {
-            Check(elemOne);
-            Check(elemTwo);
-            int min = 0;
-            int max = 0;
-            List<int> param = new List<int>();
+            ValidateTriangle(elemOne);
+            ValidateTriangle(elemTwo);
 
+            List<int> param = new List<int>();
             for (var i = 0; i < elemTwo.Count; i++)
             {
                 var re = CheckPointByELem(elemOne, elemTwo[i]);
                 param.Add(re);
             }
-            min = param.Min();
-            max = param.Max();
+
+            var min = param.Min();
+            var max = param.Max();
             if (min > 0 && max > 0)
-                return 1; //elemTwo в elemOne
+                return 1;//elemTwo в elemOne
             else if ((min < 0 && max < 0))
                 return -1;//elemTwo не в elemOne
             else
                 return 0;//elemTwo пересекает elemOne
         }
-
+        
         /// <summary>
         /// входит ли точка в фигуру
         /// </summary>
@@ -52,34 +51,7 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             if (elem.Any(x => x.X == point.X && x.Y == point.Y))
                 return 0;//точка на стороне елемента,в данном случае угол общий, по хорошему надо другой код
 
-            int summ = 0;
-            int a = (elem[0].X - point.X) * (elem[1].Y - elem[0].Y) - (elem[1].X - elem[0].X) * (elem[0].Y - point.Y);
-            int b = (elem[1].X - point.X) * (elem[2].Y - elem[1].Y) - (elem[2].X - elem[1].X) * (elem[1].Y - point.Y);
-            int c = (elem[2].X - point.X) * (elem[0].Y - elem[2].Y) - (elem[0].X - elem[2].X) * (elem[2].Y - point.Y);
-
-            if (a > 0)
-                summ++;
-            else if (a < 0)
-                summ--;
-
-            if (b > 0)
-                summ++;
-            else if (b < 0)
-                summ--;
-
-            if (c > 0)
-                summ++;
-            else if (c < 0)
-                summ--;
-
-            summ = Math.Abs(summ);
-
-            if (summ == 3)
-                return 1; //точка принадлежит елементу
-            else if (summ == 2)
-                return 0;//точка на стороне елемента
-            else
-                return -1;//точка не принадлежит елементу
+            return CheckPointState(elem, point);
         }
 
         public static bool CheckLineByPoint(Point2BL first, Point2BL second, Point2BL three)
@@ -87,9 +59,29 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             return (first.X - three.X) * (second.Y - three.Y) == (first.Y - three.Y) * (second.X - three.X);
         }
 
-        private static bool Check(IList<Point2BL> elem)
+        private static int CheckPointState(IList<Point2BL> elem, Point2BL point)
         {
-            //if ((x_3 - x_1) / (x_2 - x_1) == (y_3 - y_1) / (y_2 - y_1))
+            int result = 0;
+            for (var i = 0; i < elem.Count(); i++)
+            {
+                int customIndex = i + 1 == elem.Count() ? 0 : i + 1;
+                var vector = (elem[i].X - point.X) * (elem[customIndex].Y - elem[i].Y) - (elem[customIndex].X - elem[i].X) * (elem[i].Y - point.Y);
+                if (vector > 0)
+                    result++;
+                else if (vector < 0)
+                    result--;
+            }
+            result = Math.Abs(result) switch
+            {
+                3 => 1,//точка принадлежит елементу
+                2 => 0,//точка на стороне елемента
+                _ => -1//точка не принадлежит елементу
+            };
+            return result;
+        }
+
+        private static bool ValidateTriangle(IList<Point2BL> elem)
+        {
             if (elem.Count != 3)
                 throw new DataValidException("Фигура являются не треугольниками");
 
@@ -107,6 +99,7 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
 
             if (CheckLineByPoint(elem[0], elem[1], elem[2]))
                 throw new DataValidException("Фигура являются не треугольниками");
+
             return true;
         }
 

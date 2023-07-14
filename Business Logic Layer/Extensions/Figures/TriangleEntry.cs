@@ -84,10 +84,7 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
 
         public static bool CheckLineByPoint(Point2BL first, Point2BL second, Point2BL three)
         {
-            if ((first.X - three.X) * (second.Y - three.Y) == (first.Y - three.Y) * (second.X - three.X))
-                return true;
-            else
-                return false;
+            return (first.X - three.X) * (second.Y - three.Y) == (first.Y - three.Y) * (second.X - three.X);
         }
 
         private static bool Check(IList<Point2BL> elem)
@@ -107,6 +104,7 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             x = elem.GroupBy(x => (x.X, x.Y)).Count();
             if (x != 3)
                 throw new DataValidException("Фигура являются не треугольниками");
+
             if (CheckLineByPoint(elem[0], elem[1], elem[2]))
                 throw new DataValidException("Фигура являются не треугольниками");
             return true;

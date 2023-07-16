@@ -59,35 +59,16 @@ namespace Business_Logic_Layer.Services
         /// Сервис для получения данных
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="colors">треубемый цвет, если цвет в массиве один, то будет построен градиент на основе более темного оттенка
-        /// если цвета 2 или более, градиент будет строится относительно их</param>
-        /// <returns>данные</returns>
         /// <exception cref="DataValidException"></exception>
-        public async Task<GroupDataBL> Get(Guid id, params Color[] colors)
+        public async Task<GroupDataBL> Get(Guid id)
         {
-            if (colors.Length == 0)
-                throw new DataValidException("Отсутствуют цвета");
-
             GroupDataBL result = new GroupDataBL();
             result.Id = id;
 
             var datas = await _repository.Get(id).ConfigureAwait(false);
-            var datasMap = datas.Datas.Select(x => 
+            result.Datas = datas.Datas.Select(x =>
                 new DataBL() { ZIndex = x.ZIndex, Points = x.Points.Select(z => new Point2BL() { X = z.X, Y = z.Y }).ToList() }).ToList();
 
-            var zIndexGroup = datasMap.GroupBy(x => x.ZIndex).OrderBy(x => x.Key).ToList();
-            var colorGroup = LineGradient.GetColors(zIndexGroup.Count, colors);
-
-            int i = 0;
-            foreach (var items in zIndexGroup)
-            {
-                foreach (var item in items)
-                {
-                    item.Color = colorGroup[i];
-                }
-                i++;
-            }
-            result.Datas = datasMap;
             return result;
         }
 

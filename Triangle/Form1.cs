@@ -22,7 +22,9 @@ namespace Triangle
         {
             var datas = await FileToGroupData.Map("DB/data.txt");
             var results = await _service.Set(datas);
-            results = await _service.Get(results.Id, Color.YellowGreen);
+            results = await _service.Get(results.Id);
+            results = ColorFigures.Add(results, Color.YellowGreen);
+
             CreateGraphics(results, pictureBox1);
 
             var count = results.Datas.GroupBy(x => x.ZIndex).Count();
@@ -45,7 +47,6 @@ namespace Triangle
                     var r = it.Points.Select(x => new Point() { X = (int)(x.X * p), Y = (int)(x.Y * p) }).ToArray();
                     grfx.FillPolygon(new SolidBrush(it.Color), r);
                     grfx.DrawPolygon(blackPen, r);
-
                 }
             }
             control.Image = bmp;

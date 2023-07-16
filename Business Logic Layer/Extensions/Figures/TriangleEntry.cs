@@ -45,9 +45,6 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
         /// <returns>1 точка принадлежит елементу; 0 точка на стороне елемента; -1 точка не принадлежит елементу</returns>
         public static int CheckPointByELem(this IList<Point2BL> elem, Point2BL point)
         {
-            //int a = (A.X - D.X) * (B.Y - A.Y) - (B.X - A.X) * (A.Y - D.Y);
-            //int b = (B.X - D.X) * (C.Y - B.Y) - (C.X - B.X) * (B.Y - D.Y);
-            //int c = (C.X - D.X) * (A.Y - C.Y) - (A.X - C.X) * (C.Y - D.Y);
             if (elem.Any(x => x.X == point.X && x.Y == point.Y))
                 return 0;//точка на стороне елемента, в данном случае вершина общая
 
@@ -60,6 +57,9 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             for (var i = 0; i < elem.Count(); i++)
             {
                 int customIndex = i + 1 == elem.Count() ? 0 : i + 1;
+                //int a = (A.X - D.X) * (B.Y - A.Y) - (B.X - A.X) * (A.Y - D.Y);
+                //int b = (B.X - D.X) * (C.Y - B.Y) - (C.X - B.X) * (B.Y - D.Y);
+                //int c = (C.X - D.X) * (A.Y - C.Y) - (A.X - C.X) * (C.Y - D.Y);
                 var vector = (elem[i].X - point.X) * (elem[customIndex].Y - elem[i].Y) - (elem[customIndex].X - elem[i].X) * (elem[i].Y - point.Y);
                 if (vector > 0)
                     result++;

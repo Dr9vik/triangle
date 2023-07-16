@@ -9,6 +9,6 @@ namespace Business_Logic_Layer.Common.Services
     public interface IFigureService
     {
         Task<GroupDataBL> Set(GroupDataBLCreate item);
-        Task<GroupDataBL> Get(Guid id, params Color[] colors);
+        Task<GroupDataBL> Get(Guid id);
     }
 }

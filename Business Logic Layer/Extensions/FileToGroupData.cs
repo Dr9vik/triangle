@@ -7,6 +7,11 @@ namespace Business_Logic_Layer.Extensions
 {
     public static class FileToGroupData
     {
+        /// <summary>
+        /// мапер данных с файла на модель
+        /// </summary>
+        /// <param name="path">путь до файла</param>
+        /// <returns>модель</returns>
         public static async Task<GroupDataBLCreate> Map(string path)
         {
             var result = new GroupDataBLCreate() { Datas = new List<DataBL>() };

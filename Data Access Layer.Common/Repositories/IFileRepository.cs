@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Common.Repositories
 {
-    public interface IFileRepository : IRepository<IList<DataDL>>
+    public interface IFileRepository : IRepository<GroupDataDL>
     {
     }
 }

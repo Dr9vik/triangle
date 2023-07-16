@@ -20,7 +20,7 @@ namespace Triangle
                 .Build();
             var serviceProvider = new ServiceCollection();
             serviceProvider.AddTransient<IFileRepository, FileRepository>();
-            serviceProvider.AddTransient<IDataService, DataService>();
+            serviceProvider.AddTransient<ITriangleService, TriangleService>();
             serviceProvider.AddSingleton<IConfiguration>(Configuration);
             serviceProvider.AddScoped<Form1>();
             serviceProvider.AddSingleton<ExceptionMiddleware>();

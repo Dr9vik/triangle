@@ -49,14 +49,9 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             //int b = (B.X - D.X) * (C.Y - B.Y) - (C.X - B.X) * (B.Y - D.Y);
             //int c = (C.X - D.X) * (A.Y - C.Y) - (A.X - C.X) * (C.Y - D.Y);
             if (elem.Any(x => x.X == point.X && x.Y == point.Y))
-                return 0;//точка на стороне елемента,в данном случае угол общий, по хорошему надо другой код
+                return 0;//точка на стороне елемента, в данном случае вершина общая
 
             return CheckPointState(elem, point);
-        }
-
-        public static bool CheckLineByPoint(Point2BL first, Point2BL second, Point2BL three)
-        {
-            return (first.X - three.X) * (second.Y - three.Y) == (first.Y - three.Y) * (second.X - three.X);
         }
 
         private static int CheckPointState(IList<Point2BL> elem, Point2BL point)
@@ -80,27 +75,25 @@ namespace Business_Logic_Layer.Common.Extensions.Crossing
             return result;
         }
 
-        private static bool ValidateTriangle(IList<Point2BL> elem)
+        private static void ValidateTriangle(IList<Point2BL> elem)
         {
             if (elem.Count != 3)
-                throw new DataValidException("Фигура являются не треугольниками");
+                throw new DataValidException("Фигура является не треугольником");
 
             var x = elem.GroupBy(x => x.X).Count();
             if (x <= 1)
-                throw new DataValidException("Фигура являются не треугольниками");
+                throw new DataValidException("Фигура является не треугольником");
 
             x = elem.GroupBy(x => x.Y).Count();
             if (x <= 1)
-                throw new DataValidException("Фигура являются не треугольниками");
+                throw new DataValidException("Фигура является не треугольником");
 
             x = elem.GroupBy(x => (x.X, x.Y)).Count();
             if (x != 3)
-                throw new DataValidException("Фигура являются не треугольниками");
+                throw new DataValidException("Фигура является не треугольником");
 
-            if (CheckLineByPoint(elem[0], elem[1], elem[2]))
-                throw new DataValidException("Фигура являются не треугольниками");
-
-            return true;
+            if (LineEntry.CheckLineByPoint(elem[0], elem[1], elem[2]))
+                throw new DataValidException("Фигура является не треугольником");
         }
 
     }

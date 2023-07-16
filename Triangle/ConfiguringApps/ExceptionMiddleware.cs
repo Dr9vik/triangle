@@ -1,12 +1,9 @@
-﻿
-using Data_Access_Layer.Exceptions;
-
-namespace Triangle.ConfiguringApps
+﻿namespace Triangle.ConfiguringApps
 {
     public class ExceptionMiddleware
     {
-        public delegate void AccountHandler(string message);
-        public event AccountHandler? Notify;
+        public delegate void ExceptionHandler(string message);
+        public event ExceptionHandler? Notify;
         public ExceptionMiddleware()
         {
             Application.ThreadException += ApplicationThreadException;

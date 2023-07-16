@@ -2,14 +2,12 @@ using Business_Logic_Layer.Common.Extensions.Crossing;
 using Business_Logic_Layer.Common.Models;
 using Business_Logic_Layer.Common.Services;
 using Business_Logic_Layer.Exceptions;
-using Business_Logic_Layer.Extensions.Colors;
 using Data_Access_Layer.Common.Models;
 using Data_Access_Layer.Common.Repositories;
 using Data_Access_Layer.Exceptions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 

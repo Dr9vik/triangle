@@ -45,6 +45,7 @@ namespace Business_Logic_Layer.Services
 
             await _repository.Set(data).ConfigureAwait(false);
 
+            //мапер лень использовать
             return new GroupDataBL()
             {
                 Id = data.Id,
